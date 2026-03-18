@@ -1,0 +1,63 @@
+/* Configuración general */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #e0e0e0;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+}
+
+/* El escenario del juego */
+.game-container {
+    width: 600px;
+    height: 200px;
+    background-color: white;
+    border-bottom: 3px solid #535353;
+    position: relative;
+    overflow: hidden;
+}
+
+/* El Dinosaurio */
+#dino {
+    width: 40px;
+    height: 40px;
+    background-color: #535353; /* Color gris oscuro original */
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+}
+
+/* El Obstáculo (Cactus) */
+#cactus {
+    width: 25px;
+    height: 45px;
+    background-color: #ff4d4d;
+    position: absolute;
+    bottom: 0;
+    right: -30px; /* Empieza fuera de la pantalla */
+}
+
+/* Marcador */
+#score {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 20px;
+    color: #535353;
+}
+
+/* Animación del salto usando Keyframes */
+.jump-animation {
+    animation: jump 0.5s ease-out;
+}
+
+@keyframes jump {
+    0% { bottom: 0; }
+    40% { bottom: 120px; } /* Altura máxima */
+    60% { bottom: 120px; }
+    100% { bottom: 0; }
+}
