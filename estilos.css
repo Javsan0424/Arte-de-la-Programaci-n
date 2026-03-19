@@ -1,4 +1,4 @@
-/* Configuración general */
+/* Estilos base del cuerpo */
 body {
     margin: 0;
     padding: 0;
@@ -6,58 +6,92 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #e0e0e0;
+    background-color: #f7f7f7;
     font-family: 'Courier New', Courier, monospace;
-    overflow: hidden;
 }
 
-/* El escenario del juego */
+/* El lienzo del juego */
 .game-container {
     width: 600px;
     height: 200px;
-    background-color: white;
+    background-color: #fff;
     border-bottom: 3px solid #535353;
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* Importante para que el cactus desaparezca al salir */
 }
 
-/* El Dinosaurio */
+/* Capas de Menú (Overlays) */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* Por encima de los personajes */
+}
+
+/* Clase de utilidad para ocultar elementos */
+.hidden {
+    display: none !important;
+}
+
+/* Botones de menú */
+button {
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #535353;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+/* Personajes */
 #dino {
     width: 40px;
     height: 40px;
-    background-color: #535353; /* Color gris oscuro original */
+    background-color: #535353;
     position: absolute;
     bottom: 0;
     left: 50px;
 }
 
-/* El Obstáculo (Cactus) */
 #cactus {
     width: 25px;
     height: 45px;
     background-color: #ff4d4d;
     position: absolute;
     bottom: 0;
-    right: -30px; /* Empieza fuera de la pantalla */
+    right: -30px; /* Inicia fuera de pantalla */
 }
 
-/* Marcador */
 #score {
     position: absolute;
     top: 10px;
     right: 20px;
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: bold;
     color: #535353;
 }
 
-/* Animación del salto usando Keyframes */
+/* Animación de Salto */
 .jump-animation {
-    animation: jump 0.5s ease-out;
+    animation: jump-frame 0.5s ease-out;
 }
 
-@keyframes jump {
+@keyframes jump-frame {
     0% { bottom: 0; }
-    40% { bottom: 120px; } /* Altura máxima */
+    40% { bottom: 120px; }
     60% { bottom: 120px; }
     100% { bottom: 0; }
 }

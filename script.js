@@ -1,27 +1,69 @@
-/**
- * LÓGICA DEL DINO GAME
- * Documentado para facilitar el aprendizaje
- */
-
+// Referencias a elementos del DOM
 const dino = document.getElementById("dino");
 const cactus = document.getElementById("cactus");
 const scoreElement = document.getElementById("score");
+const menuInicio = document.getElementById("menu-inicio");
+const menuGameOver = document.getElementById("menu-gameover");
+const finalScoreElement = document.getElementById("final-score");
 
+// Variables de estado del juego
 let score = 0;
-let isGameOver = false;
+let isPlaying = false;
+let gameLoop; // Guardará el intervalo principal
 
 /**
- * Función para ejecutar el salto
- * Agrega la clase CSS de animación y la quita al terminar
+ * Inicia o reinicia el juego
+ */
+function startGame() {
+    // 1. Resetear estados
+    score = 0;
+    isPlaying = true;
+    scoreElement.innerText = "Puntos: 0";
+    
+    // 2. Ocultar menús
+    menuInicio.classList.add("hidden");
+    menuGameOver.classList.add("hidden");
+    
+    // 3. Posicionar cactus al inicio
+    cactus.style.left = "600px";
+
+    // 4. Lanzar el bucle lógico (cada 10ms)
+    // Limpiamos cualquier intervalo previo por seguridad
+    if (gameLoop) clearInterval(gameLoop); 
+    
+    gameLoop = setInterval(() => {
+        moverCactus();
+        revisarColision();
+    }, 10);
+}
+
+/**
+ * Maneja el movimiento del obstáculo
+ */
+function moverCactus() {
+    let cactusLeft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"));
+
+    if (cactusLeft < -30) {
+        // El cactus salió de la pantalla: reinicia y suma puntos
+        cactus.style.left = "600px";
+        score++;
+        scoreElement.innerText = `Puntos: ${score}`;
+    } else {
+        // Velocidad base 8 + bono por puntuación (se vuelve más rápido)
+        let velocidad = 8 + Math.floor(score / 10); 
+        cactus.style.left = (cactusLeft - velocidad) + "px";
+    }
+}
+
+/**
+ * Lógica de salto del dinosaurio
  */
 function jump() {
-    if (isGameOver) return; // Si perdió, no puede saltar
-
-    // Verificamos que no tenga ya la clase para evitar "doble salto" en el aire
-    if (!dino.classList.contains("jump-animation")) {
+    // Solo saltar si el juego está activo y no está ya saltando
+    if (isPlaying && !dino.classList.contains("jump-animation")) {
         dino.classList.add("jump-animation");
         
-        // El tiempo (500ms) debe coincidir con la duración en el CSS
+        // Remover la clase después de que termine la animación (500ms)
         setTimeout(() => {
             dino.classList.remove("jump-animation");
         }, 500);
@@ -29,63 +71,40 @@ function jump() {
 }
 
 /**
- * Bucle principal del juego
- * Se ejecuta cada 10 milisegundos para detectar colisiones y mover el cactus
+ * Verifica si el dino y el cactus se tocan
  */
-let gameLoop = setInterval(() => {
-    if (isGameOver) return;
-
-    // 1. Obtener posiciones actuales
-    // getComputedStyle nos da los valores reales de CSS en el momento exacto
+function revisarColision() {
     let dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("top"));
     let cactusLeft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"));
 
-    // 2. Mover el cactus manualmente hacia la izquierda
-    if (cactusLeft < -30) {
-        // Si el cactus sale de la pantalla por la izquierda, lo reiniciamos a la derecha
-        cactus.style.left = "600px";
-        actualizarPuntaje();
-    } else {
-        // Velocidad del cactus: se resta 8px cada 10ms
-        cactus.style.left = (cactusLeft - 8) + "px";
-    }
-
-    // 3. Lógica de Colisión (Matemática simple)
-    // Si el cactus está entre X=20 y X=50 (zona del dino)
-    // Y el dino NO está lo suficientemente alto (Y > 150px desde arriba)
+    // El dino está en el área horizontal del cactus (entre 20px y 50px)
+    // Y el dino está lo suficientemente bajo (top >= 160px significa que no saltó)
     if (cactusLeft > 0 && cactusLeft < 50 && dinoTop >= 160) {
-        gameOver();
+        finalizarJuego();
     }
-
-}, 10);
-
-/**
- * Actualiza el marcador de puntos
- */
-function actualizarPuntaje() {
-    score++;
-    scoreElement.innerText = `Puntos: ${score}`;
 }
 
 /**
- * Detiene el juego y alerta al usuario
+ * Detiene el juego y muestra el menú de Game Over
  */
-function gameOver() {
-    isGameOver = true;
-    alert(`¡GAME OVER! Puntuación final: ${score}`);
-    // Recargar la página para reiniciar
-    location.reload();
+function finalizarJuego() {
+    isPlaying = false;
+    clearInterval(gameLoop); // Detiene el movimiento del cactus inmediatamente
+    
+    finalScoreElement.innerText = score;
+    menuGameOver.classList.remove("hidden");
 }
 
-/**
- * Eventos de control: Tecla espacio o Click/Tap
- */
+// --- EVENTOS DE CONTROL ---
+
+// Saltar con la tecla Espacio
 document.addEventListener("keydown", (event) => {
-    if (event.code === "Space" || event.key === " ") {
+    if (event.code === "Space") {
         jump();
     }
 });
 
+// Saltar con click en la pantalla
 document.addEventListener("mousedown", () => {
     jump();
 });
