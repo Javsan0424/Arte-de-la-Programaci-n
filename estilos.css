@@ -79,13 +79,12 @@ body {
 
 /* ANIMACIÓN */
 .jump-animation {
-    animation: jump 0.5s cubic-bezier(0.21, 0.61, 0.35, 1);
+    animation: jump ease;
 }
 
 @keyframes jump {
-    0% { bottom: 0; }
-    45% { bottom: 120px; } /* Un poco más de altura para esquivar mejor */
-    55% { bottom: 120px; }
+    0%   { bottom: 0; }
+    50%  { bottom: 120px; }
     100% { bottom: 0; }
 }
 
