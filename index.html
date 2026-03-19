@@ -2,33 +2,27 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dino Game Pro - Full</title>
+    <title>Dino Game - Versión Original</title>
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-
-    <div class="game-container" id="gameContainer">
-        
+    <div id="game-container">
         <div id="score">Puntos: 0</div>
-        
-        <div id="menu-inicio" class="overlay">
-            <h1>DINO JUMP</h1>
-            <button onclick="startGame()">JUGAR</button>
-            <p>Usa <b>Espacio</b> o <b>Click</b> para saltar</p>
-        </div>
 
-        <div id="menu-gameover" class="overlay hidden">
-            <h1>¡TE CHOCASTE!</h1>
-            <p>Puntuación: <span id="final-score">0</span></p>
-            <button onclick="startGame()">REINTENTAR</button>
+        <div id="menu-inicio">
+            <h1>Dino Jump</h1>
+            <p>Presiona ESPACIO o haz CLICK para empezar</p>
         </div>
 
         <div id="dino"></div>
         <div id="cactus"></div>
-        <div class="ground"></div>
-    </div>
 
+        <div id="menu-gameover" class="hidden">
+            <h1>¡FIN DEL JUEGO!</h1>
+            <p>Puntuación final: <span id="final-score">0</span></p>
+            <button onclick="startGame()">Reintentar</button>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

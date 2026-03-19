@@ -1,27 +1,28 @@
-/* Estilos base del cuerpo */
+/* Centrar todo el juego en la pantalla */
 body {
     margin: 0;
-    padding: 0;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f7f7f7;
-    font-family: 'Courier New', Courier, monospace;
+    background-color: #f0f0f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* El lienzo del juego */
-.game-container {
+#game-container {
     width: 600px;
     height: 200px;
-    background-color: #fff;
-    border-bottom: 3px solid #535353;
+    border-bottom: 2px solid #555;
     position: relative;
-    overflow: hidden; /* Importante para que el cactus desaparezca al salir */
+    background-color: #fff;
+    /* Quitamos el overflow: hidden momentáneamente para ver si el menú respira, 
+       pero lo ideal es que el menú sea parte del flujo */
+    overflow: hidden; 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* Capas de Menú (Overlays) */
-.overlay {
+/* MENÚS: Ahora se adaptan al tamaño del juego sin cortarse */
+#menu-inicio, #menu-gameover {
     position: absolute;
     top: 0;
     left: 0;
@@ -32,66 +33,83 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 10; /* Por encima de los personajes */
+    z-index: 20;
+    text-align: center;
 }
 
-/* Clase de utilidad para ocultar elementos */
-.hidden {
-    display: none !important;
+#menu-inicio h1, #menu-gameover h1 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    color: #333;
 }
 
-/* Botones de menú */
-button {
-    padding: 12px 24px;
-    font-size: 18px;
-    background-color: #535353;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: inherit;
+#menu-inicio p, #menu-gameover p {
+    margin: 5px 0;
+    color: #666;
 }
 
-button:hover {
-    background-color: #333;
+.hidden { 
+    display: none !important; 
 }
 
-/* Personajes */
+/* PERSONAJES */
 #dino {
-    width: 40px;
-    height: 40px;
-    background-color: #535353;
+    width: 50px;
+    height: 50px;
     position: absolute;
     bottom: 0;
     left: 50px;
+    z-index: 10;
 }
 
 #cactus {
-    width: 25px;
-    height: 45px;
-    background-color: #ff4d4d;
+    width: 40px;
+    height: 40px;
     position: absolute;
     bottom: 0;
-    right: -30px; /* Inicia fuera de pantalla */
+    left: 600px;
+    z-index: 10;
+}
+
+#dino img, #cactus img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ANIMACIÓN */
+.jump-animation {
+    animation: jump 0.5s cubic-bezier(0.21, 0.61, 0.35, 1);
+}
+
+@keyframes jump {
+    0% { bottom: 0; }
+    45% { bottom: 120px; } /* Un poco más de altura para esquivar mejor */
+    55% { bottom: 120px; }
+    100% { bottom: 0; }
 }
 
 #score {
     position: absolute;
     top: 10px;
-    right: 20px;
+    right: 15px;
     font-size: 18px;
     font-weight: bold;
-    color: #535353;
+    color: #555;
+    z-index: 5;
 }
 
-/* Animación de Salto */
-.jump-animation {
-    animation: jump-frame 0.5s ease-out;
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
-@keyframes jump-frame {
-    0% { bottom: 0; }
-    40% { bottom: 120px; }
-    60% { bottom: 120px; }
-    100% { bottom: 0; }
+button:hover {
+    background-color: #333;
 }

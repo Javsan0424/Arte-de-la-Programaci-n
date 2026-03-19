@@ -1,4 +1,4 @@
-// Referencias a elementos del DOM
+// Referencias
 const dino = document.getElementById("dino");
 const cactus = document.getElementById("cactus");
 const scoreElement = document.getElementById("score");
@@ -6,29 +6,31 @@ const menuInicio = document.getElementById("menu-inicio");
 const menuGameOver = document.getElementById("menu-gameover");
 const finalScoreElement = document.getElementById("final-score");
 
-// Variables de estado del juego
+// Imágenes
+const dinoImg = new Image();
+dinoImg.src = "https://imgs.search.brave.com/HFgcIw3mxQsYvsDQHPMwWKHOSfRonKPYHJ0ITNbcKaY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzRhL2E2/LzVhLzRhYTY1YTU0/MTMxMjRkMGI1YzMz/OTk5YTRkYjUxNjJl/LmpwZw"; 
+
+const cactusImg = new Image();
+cactusImg.src = "https://imgs.search.brave.com/RGwHYv58JtTHMQrxCy5soA8w3Lne6WLeD0owPNDdHag/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9mbHlj/bGlwYXJ0LmNvbS90/aHVtYnMvY2FjdHVz/LXNpbHVldGEtMTY5/MDc2NS5wbmc";
+
+// Cargar imágenes en los divs
+dinoImg.onload = () => { dino.innerHTML = ""; dino.appendChild(dinoImg); };
+cactusImg.onload = () => { cactus.innerHTML = ""; cactus.appendChild(cactusImg); };
+
 let score = 0;
 let isPlaying = false;
-let gameLoop; // Guardará el intervalo principal
+let gameLoop;
 
-/**
- * Inicia o reinicia el juego
- */
 function startGame() {
-    // 1. Resetear estados
     score = 0;
     isPlaying = true;
     scoreElement.innerText = "Puntos: 0";
     
-    // 2. Ocultar menús
     menuInicio.classList.add("hidden");
     menuGameOver.classList.add("hidden");
     
-    // 3. Posicionar cactus al inicio
     cactus.style.left = "600px";
 
-    // 4. Lanzar el bucle lógico (cada 10ms)
-    // Limpiamos cualquier intervalo previo por seguridad
     if (gameLoop) clearInterval(gameLoop); 
     
     gameLoop = setInterval(() => {
@@ -37,74 +39,54 @@ function startGame() {
     }, 10);
 }
 
-/**
- * Maneja el movimiento del obstáculo
- */
 function moverCactus() {
     let cactusLeft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"));
 
     if (cactusLeft < -30) {
-        // El cactus salió de la pantalla: reinicia y suma puntos
         cactus.style.left = "600px";
         score++;
         scoreElement.innerText = `Puntos: ${score}`;
     } else {
-        // Velocidad base 8 + bono por puntuación (se vuelve más rápido)
         let velocidad = 8 + Math.floor(score / 10); 
         cactus.style.left = (cactusLeft - velocidad) + "px";
     }
 }
 
-/**
- * Lógica de salto del dinosaurio
- */
 function jump() {
-    // Solo saltar si el juego está activo y no está ya saltando
     if (isPlaying && !dino.classList.contains("jump-animation")) {
         dino.classList.add("jump-animation");
-        
-        // Remover la clase después de que termine la animación (500ms)
         setTimeout(() => {
             dino.classList.remove("jump-animation");
         }, 500);
     }
 }
 
-/**
- * Verifica si el dino y el cactus se tocan
- */
 function revisarColision() {
-    let dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("top"));
+    let dinoBottom = parseInt(window.getComputedStyle(dino).getPropertyValue("bottom"));
     let cactusLeft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"));
 
-    // El dino está en el área horizontal del cactus (entre 20px y 50px)
-    // Y el dino está lo suficientemente bajo (top >= 160px significa que no saltó)
-    if (cactusLeft > 0 && cactusLeft < 50 && dinoTop >= 160) {
+    // Hitbox ajustada para el tamaño de la imagen (50px)
+    if (cactusLeft > 50 && cactusLeft < 90 && dinoBottom < 40) {
         finalizarJuego();
     }
 }
 
-/**
- * Detiene el juego y muestra el menú de Game Over
- */
 function finalizarJuego() {
     isPlaying = false;
-    clearInterval(gameLoop); // Detiene el movimiento del cactus inmediatamente
-    
+    clearInterval(gameLoop);
     finalScoreElement.innerText = score;
     menuGameOver.classList.remove("hidden");
 }
 
-// --- EVENTOS DE CONTROL ---
-
-// Saltar con la tecla Espacio
+// Eventos
 document.addEventListener("keydown", (event) => {
     if (event.code === "Space") {
-        jump();
+        if (!isPlaying && !menuInicio.classList.contains("hidden")) startGame();
+        else jump();
     }
 });
 
-// Saltar con click en la pantalla
 document.addEventListener("mousedown", () => {
-    jump();
+    if (!isPlaying && !menuInicio.classList.contains("hidden")) startGame();
+    else jump();
 });
