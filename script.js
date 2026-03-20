@@ -8,7 +8,7 @@ const finalScoreElement = document.getElementById("final-score");
 
 // Imágenes
 const dinoImg = new Image();
-dinoImg.src = "https://imgs.search.brave.com/HFgcIw3mxQsYvsDQHPMwWKHOSfRonKPYHJ0ITNbcKaY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzRhL2E2/LzVhLzRhYTY1YTU0/MTMxMjRkMGI1YzMz/OTk5YTRkYjUxNjJl/LmpwZw"; 
+dinoImg.src = "https://i.pinimg.com/originals/05/79/d4/0579d4e6568c980df96b447fbc358014.gif"; 
 
 const cactusImg = new Image();
 cactusImg.src = "https://imgs.search.brave.com/RGwHYv58JtTHMQrxCy5soA8w3Lne6WLeD0owPNDdHag/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9mbHlj/bGlwYXJ0LmNvbS90/aHVtYnMvY2FjdHVz/LXNpbHVldGEtMTY5/MDc2NS5wbmc";
